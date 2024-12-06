@@ -6,12 +6,15 @@
 
 class Edge : public QGraphicsPathItem {
 public:
-    Edge(Node *start, Node *end, QGraphicsItem *parent = nullptr);
+    Edge(Node *start, Node *end, double length,QGraphicsItem *parent = nullptr);
 
+protected:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 private:
     Node *startNode;
     Node *endNode;
+    double length;
 };
 
 #endif // EDGE_H

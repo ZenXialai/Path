@@ -19,10 +19,13 @@ signals:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
 
 private:
     QString name;                    // 节点名称
     QPointF position;                // 节点坐标
 };
+
 
 #endif // NODE_H
