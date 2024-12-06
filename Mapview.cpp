@@ -23,11 +23,6 @@ void MapView::wheelEvent(QWheelEvent *event) {
 void MapView::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
         emit nodeAdded(mapToScene(event->pos())); // 右键点击添加节点
-    } else if (isDrawingPath && event->button() == Qt::LeftButton) {
-        QPointF scenePos = mapToScene(event->pos());
-        currentPathPoints.append(scenePos);
-        scene()->addEllipse(scenePos.x() - 2, scenePos.y() - 2, 4, 4,
-                            QPen(Qt::red), QBrush(Qt::red)); // 显示路径点
     }
     QGraphicsView::mousePressEvent(event);
 }

@@ -17,21 +17,40 @@
    <widget class="MapView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>5</x>
-      <y>11</y>
+      <x>0</x>
+      <y>0</y>
       <width>1800</width>
       <height>1000</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:#6a93a3;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="findPathButton">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>120</y>
-      <width>221</width>
-      <height>181</height>
+      <x>90</x>
+      <y>270</y>
+      <width>181</width>
+      <height>81</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>华文宋体</family>
+      <pointsize>25</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:#FFFFFF;</string>
     </property>
     <property name="text">
      <string>寻路</string>
@@ -40,14 +59,48 @@
    <widget class="QLabel" name="statusLabel">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>190</y>
-      <width>141</width>
+      <x>90</x>
+      <y>350</y>
+      <width>181</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <italic>true</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:#FFFFFF;</string>
+    </property>
     <property name="text">
-     <string>状态</string>
+     <string>   </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>561</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>华文行楷</family>
+      <pointsize>25</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #6a93a3; color: #F8F5F2; 
+</string>
+    </property>
+    <property name="text">
+     <string>中国石油大学（华东）校园导航系统</string>
     </property>
    </widget>
   </widget>
