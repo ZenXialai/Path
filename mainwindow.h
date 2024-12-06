@@ -28,6 +28,9 @@ private slots:
     void handleNodeClicked(Node* node); // 处理节点点击事件
     void resetPathHighlights(); // 重置所有路径和节点的高亮状态
     void handleNodeClickForPathDrawing(Node *node);
+public slots:
+    void onSearchNodeClicked();
+    void startNodeBlink(Node* node);
 
 private:
     bool isFindingPath;           // 标识当前是否处于寻路模式

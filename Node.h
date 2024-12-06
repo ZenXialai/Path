@@ -13,6 +13,7 @@ public:
 
     QString getName() const;         // 获取节点名称
     QPointF getPosition() const;     // 获取节点坐标
+    void setBlinking(bool blink);
 
 signals:
     void clicked(Node *node);        // 点击信号

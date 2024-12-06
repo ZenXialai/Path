@@ -8,10 +8,16 @@
 #include <cmath>
 #include <QPixmap>
 #include<queue>
+#include<QTimer>
+#include <QMessageBox>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), scene(new QGraphicsScene(this)), nodeCount(0), currentStartNode(nullptr), StartNode(nullptr), EndNode(nullptr), isFindingPath(false) {
     // 加载 UI
     ui->setupUi(this);
+
+    connect(ui->lineEditSearch, &QLineEdit::returnPressed, this, &MainWindow::onSearchNodeClicked);
+    connect(ui->pushButtonSearch, &QPushButton::clicked, this, &MainWindow::onSearchNodeClicked);
 
     // 将 scene 绑定到 ui 中的 graphicsView（即 MapView）
     ui->graphicsView->setScene(scene);
@@ -45,166 +51,6 @@ void MainWindow::loadMap(const QString &mapPath) {
         qDebug() << "Failed to load map from:" << mapPath;
     }
 }
-
-
-
-// void MainWindow::loadData(const QString &filePath) {
-//     QFile file(filePath);
-//     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-//         qDebug() << "Failed to open file for loading:" << filePath;
-//         return;
-//     }
-
-//     QTextStream in(&file);
-//     QString line;
-//     bool readingNodes = false, readingEdges = false;
-
-//     while (!in.atEnd()) {
-//         line = in.readLine().trimmed();
-
-//         if (line == "[Nodes]") {
-//             readingNodes = true;
-//             readingEdges = false;
-//             continue;
-//         } else if (line == "[Edges]") {
-//             readingNodes = false;
-//             readingEdges = true;
-//             continue;
-//         }
-
-//         if (readingNodes) {
-//             auto parts = line.split(",");
-//             if (parts.size() == 3) {
-//                 QString name = parts[0];
-//                 QPointF position(parts[1].toDouble(), parts[2].toDouble());
-
-//                 // 创建并显示节点
-//                 Node *node = new Node(name, position);
-//                 scene->addItem(node);
-//                 nodes.append({name, position, node});
-
-//                 // 连接节点点击信号
-//                 connect(node, &Node::clicked, this, &MainWindow::handleNodeClicked);
-//                 connect(node, &Node::clicked, this, &MainWindow::handlePathDrawing);
-//             }
-//         } else if (readingEdges) {
-//             auto parts = line.split(",");
-//             if (parts.size() >= 4) {
-//                 QString startNode = parts[0];
-//                 QString endNode = parts[1];
-//                 double length = parts[2].toDouble();
-
-//                 QList<QPointF> points;
-//                 for (int i = 3; i < parts.size(); ++i) {
-//                     auto coords = parts[i].split(" ");
-//                     if (coords.size() == 2) {
-//                         points.append(QPointF(coords[0].toDouble(), coords[1].toDouble()));
-//                     }
-//                 }
-
-//                 // 在场景中绘制路径
-//                 QPainterPath path(points.first());
-//                 for (int i = 1; i < points.size(); ++i) {
-//                     path.lineTo(points[i]);
-//                 }
-
-//                 QGraphicsPathItem *pathItem = new QGraphicsPathItem(path);
-//                 pathItem->setPen(QPen(Qt::black, 2));
-//                 scene->addItem(pathItem);
-
-//                 // 保存路径信息到 edges 列表中，包括绘制的图形对象指针
-//                 edges.append({startNode, endNode, points, length, pathItem});
-//                 adjacencyList[startNode].append(qMakePair(endNode, length));
-//                 adjacencyList[endNode].append(qMakePair(startNode, length));
-//             }
-//         }
-//     }
-
-//     file.close();
-// }
-
-// void MainWindow::loadData(const QString &filePath) {
-//     QFile file(filePath);
-//     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-//         qDebug() << "Failed to open file for loading:" << filePath;
-//         return;
-//     }
-
-//     QTextStream in(&file);
-//     QString line;
-//     bool readingNodes = false, readingEdges = false;
-
-//     while (!in.atEnd()) {
-//         line = in.readLine().trimmed();
-
-//         if (line == "[Nodes]") {
-//             readingNodes = true;
-//             readingEdges = false;
-//             continue;
-//         } else if (line == "[Edges]") {
-//             readingNodes = false;
-//             readingEdges = true;
-//             continue;
-//         }
-
-//         if (readingNodes) {
-//             auto parts = line.split(",");
-//             if (parts.size() == 3) {
-//                 QString name = parts[0];
-//                 QPointF position(parts[1].toDouble(), parts[2].toDouble());
-
-//                 // 创建并显示节点
-//                 Node *node = new Node(name, position);
-//                 scene->addItem(node);
-//                 nodes.append({name, position, node});
-
-//                 // 连接节点点击信号
-//                 connect(node, &Node::clicked, this, &MainWindow::handleNodeClicked);
-//                 connect(node, &Node::clicked, this, &MainWindow::handlePathDrawing);
-//             }
-//         } else if (readingEdges) {
-//             auto parts = line.split(",");
-//             if (parts.size() >= 4) {
-//                 QString startNode = parts[0];
-//                 QString endNode = parts[1];
-//                 double length = parts[2].toDouble();
-
-//                 QList<QPointF> points;
-//                 for (int i = 3; i < parts.size(); ++i) {
-//                     auto coords = parts[i].split(" ");
-//                     if (coords.size() == 2) {
-//                         points.append(QPointF(coords[0].toDouble(), coords[1].toDouble()));
-//                     }
-//                 }
-
-//                 // 在场景中绘制路径
-//                 QPainterPath path(points.first());
-//                 for (int i = 1; i < points.size(); ++i) {
-//                     path.lineTo(points[i]);
-//                 }
-
-//                 QGraphicsPathItem *pathItem = new QGraphicsPathItem(path);
-//                 pathItem->setPen(QPen(Qt::black, 2));
-//                 scene->addItem(pathItem);
-
-//                 // 保存路径信息到 edges 列表中，包括绘制的图形对象指针
-//                 edges.append({startNode, endNode, points, length, pathItem});
-//                 adjacencyList[startNode].append(qMakePair(endNode, length));
-//                 adjacencyList[endNode].append(qMakePair(startNode, length));
-
-//                 // 显示路径长度
-//                 QPointF midPoint = (points.first() + points.last()) / 2;  // 计算路径中点位置
-//                 QGraphicsTextItem *lengthTextItem = new QGraphicsTextItem(QString::number(length, 'f', 1));
-//                 lengthTextItem->setDefaultTextColor(Qt::blue);  // 设置文本颜色为红色，便于区分
-//                 lengthTextItem->setFont(QFont("Arial", 8));    // 设置文本字体和大小
-//                 lengthTextItem->setPos(midPoint);              // 将文本放置在路径中点位置
-//                 scene->addItem(lengthTextItem);                // 将文本项添加到场景中
-//             }
-//         }
-//     }
-
-//     file.close();
-// }
 void MainWindow::loadData(const QString &filePath) {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -628,4 +474,53 @@ void MainWindow::handleNodeClickForPathDrawing(Node *node) {
     }
 }
 
+void MainWindow::onSearchNodeClicked() {
+    //ui->lineEditSearch->setVisible(true);
+
+    QString searchText = ui->lineEditSearch->text().trimmed();
+    if (searchText.isEmpty()) {
+        return;
+    }
+
+    // 在 nodes 列表中查找匹配的节点
+    for (const auto& nodeData : nodes) {
+        Node* node = nodeData.nodePtr;
+        if (node->getName() == searchText) {
+            // 找到匹配节点，启动闪烁效果
+            startNodeBlink(node);
+            return;  // 只处理第一个匹配的节点
+        }
+    }
+
+    // 如果没有找到匹配节点，弹出提示
+    QMessageBox::warning(this, "节点未找到", "没有找到该节点！");
+}
+
+void MainWindow::startNodeBlink(Node* node) {
+    if (!node) return;
+    QColor originalColor = node->brush().color();
+    // 设置闪烁的定时器
+    QTimer* blinkTimer = new QTimer(this);
+    blinkTimer->setInterval(500);  // 每500ms闪烁一次
+
+    // 定义闪烁的颜色
+    static bool toggleColor = true;  // 用于切换颜色
+
+    connect(blinkTimer, &QTimer::timeout, [node, &toggleColor]() {
+        if (toggleColor) {
+            node->setBrush(Qt::yellow);  // 设置节点颜色为黄色
+        } else {
+            node->setBrush(Qt::blue);  // 恢复为原始颜色
+        }
+        toggleColor = !toggleColor;  // 切换颜色
+    });
+
+    // 设置闪烁时长：例如闪烁4秒后停止
+    QTimer::singleShot(3000, [node, blinkTimer, originalColor]() {
+        node->setBrush(originalColor);  // 恢复原始颜色
+        blinkTimer->stop();  // 停止定时器
+    });
+    // 启动定时器
+    blinkTimer->start();
+}
 

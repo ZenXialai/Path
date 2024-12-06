@@ -38,3 +38,7 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     // 绘制节点名称，名称位置可以调整（这里绘制在节点的正下方，偏移一点）
     painter->drawText(boundingRect().bottomLeft() + QPointF(-5, 15), name);
 }
+
+void Node::setBlinking(bool blink) {
+    setVisible(blink);  // 通过设置可见性来实现闪烁
+}
